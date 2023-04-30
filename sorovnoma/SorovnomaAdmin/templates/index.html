@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistika</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" style="margin-top: 8%;">
+        <div class="col-md-6">
+            <div id="pieChart" style="height: 360px; width: 100%;">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="columnChart" style="height: 360px; width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+    var pieChartValues = [
+        {% for i in variant %}
+            {
+                y: {{ i.percent }},
+                indexLabel: "{{ i.name }}",
+                color: "{{ i.color }}"
+            },
+        {% endfor %}
+    ];
+    renderPieChart(pieChartValues);
+
+    function renderPieChart(values) {
+
+        var chart = new CanvasJS.Chart("pieChart", {
+            backgroundColor: "white",
+            colorSet: "colorSet2",
+
+            title: {
+                text: "Pie Chart",
+                fontFamily: "Verdana",
+                fontSize: 25,
+                fontWeight: "normal",
+            },
+            animationEnabled: true,
+            data: [{
+                indexLabelFontSize: 15,
+                indexLabelFontFamily: "Monospace",
+                indexLabelFontColor: "darkgrey",
+                indexLabelLineColor: "darkgrey",
+                indexLabelPlacement: "outside",
+                type: "pie",
+                showInLegend: false,
+                toolTipContent: "<strong>#percent%</strong>",
+                dataPoints: values
+            }]
+        });
+        chart.render();
+    }
+
+    var columnChartValues = [
+        {% for item in variant %}
+            {
+                y: {{ item.number}},
+                label: "{{ item.name }}",
+                color: "{{ item.color }}"
+            },
+        {% endfor %}
+    ];
+    renderColumnChart(columnChartValues);
+
+    function renderColumnChart(values) {
+
+        var chart = new CanvasJS.Chart("columnChart", {
+            backgroundColor: "white",
+            colorSet: "colorSet3",
+            title: {
+                text: "Column Chart",
+                fontFamily: "Verdana",
+                fontSize: 25,
+                fontWeight: "normal",
+            },
+            animationEnabled: true,
+            legend: {
+                verticalAlign: "bottom",
+                horizontalAlign: "center"
+            },
+            theme: "theme2",
+            data: [
+
+                {
+                    indexLabelFontSize: 15,
+                    indexLabelFontFamily: "Monospace",
+                    indexLabelFontColor: "darkgrey",
+                    indexLabelLineColor: "darkgrey",
+                    indexLabelPlacement: "outside",
+                    type: "column",
+                    showInLegend: false,
+                    legendMarkerColor: "grey",
+                    dataPoints: values
+                }
+            ]
+        });
+
+        chart.render();
+    }
+
+</script>
+</html>
